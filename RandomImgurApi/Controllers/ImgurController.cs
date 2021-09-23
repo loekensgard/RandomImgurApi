@@ -1,12 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using RandomImgurApi.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace RandomImgurApi.Controllers
@@ -15,13 +8,10 @@ namespace RandomImgurApi.Controllers
     [Route("[controller]")]
     public class ImgurController : ControllerBase
     {
-
-        private readonly ILogger<ImgurController> _logger;
         private readonly ImgurService _imgurService;
 
-        public ImgurController(ILogger<ImgurController> logger, ImgurService imgurService)
+        public ImgurController(ImgurService imgurService)
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _imgurService = imgurService;
         }
 
