@@ -1,4 +1,5 @@
-﻿using Polly;
+﻿using Microsoft.Extensions.Logging;
+using Polly;
 using RandomImgurApi.Models;
 using System;
 using System.Net.Http;
@@ -11,11 +12,13 @@ namespace RandomImgurApi.Services
     {
         private readonly HttpClient _httpClient;
         private readonly RandomStringGenerator _randomStringGenerator;
+        private readonly ILogger<ImgurService> _logger;
 
-        public ImgurService(HttpClient httpClient, RandomStringGenerator randomStringGenerator)
+        public ImgurService(HttpClient httpClient, RandomStringGenerator randomStringGenerator, ILogger<ImgurService> logger)
         {
             _httpClient = httpClient;
             _randomStringGenerator = randomStringGenerator;
+            _logger = logger;
         }
 
 
@@ -25,7 +28,7 @@ namespace RandomImgurApi.Services
                 .Handle<Exception>()
                 .RetryAsync(10,(resp, count) =>
                 {
-                    Console.WriteLine(resp.Message);
+                    _logger.LogError(resp, "Failed to find image");
                 })
                 .ExecuteAsync(async () => {
                     var hash = _randomStringGenerator.RandomString(5);
